@@ -14,7 +14,7 @@ import { getSchema } from "./handlers/collections";
 // import { executeQuery } from "./handlers/query";
 // import { executeMutation } from "./handlers/mutation";
 
-const port = Number(process.env.PORT) || 8200;
+const port = Number(process.env.PORT) || 8100;
 const server = Fastify({ logger: { transport: { target: "pino-pretty" } } });
 
 server.register(FastifyCors, {
