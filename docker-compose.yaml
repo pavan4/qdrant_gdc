@@ -8,13 +8,17 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: metadata
-  qdrant-gdc:
-    build: .
+  # qdrant-gdc:
+  #   build: .
+  #   ports:
+  #     - "8100:8100"
+  qdrant:
+    image: qdrant/qdrant:latest
     ports:
-      - "8100:8100"
+      - "6333:6333"
   graphql-engine:
     restart: always
-    image: hasura/graphql-engine:v2.27.0
+    image: hasura/graphql-engine:latest
     ports:
       - "8080:8080"
     depends_on:
