@@ -16,14 +16,10 @@ const builtInProperties: ColumnInfo[] = [
     insertable: true,
   },
   {
-    name: "creationTimeUnix",
+    name: "payload",
     nullable: false,
-    type: "int",
-  },
-  {
-    name: "lastUpdateTimeUnix",
-    nullable: false,
-    type: "int",
+    type: "object",
+    insertable: true,
   },
   {
     name: "vector",
@@ -33,31 +29,22 @@ const builtInProperties: ColumnInfo[] = [
     type: "vector",
   },
 ];
+export const builtInPropertiesKeys = builtInProperties.map((p) => p.name);
 
 export async function getSchema(config: Config): Promise<SchemaResponse> {
   const qdrantClient = getQdrantClient(config);
 
   const schema = await qdrantClient.getCollections();
-  console.log("schema", schema.collections[0]);
   // note: we may run into issues if there is a class <X> and a class <X>Properties
   return {
     tables: schema.collections!.map((c): TableInfo => {
-      const columns: ColumnInfo[] = [];
-    //   [
-    //     ...c.properties!.map((p) => ({
-    //       name: p.name!,
-    //       nullable: true,
-    //       insertable: true,
-    //       updatable: true,
-    //       type: (p.dataType!),
-    //     })),
-    //     // built-in properties will override any custom properties with the same name
-    //     ...builtInProperties,
-    //   ];
+      const columns: ColumnInfo[] = [
+        // built-in properties will override any custom properties with the same name
+        ...builtInProperties,
+      ];
 
       return {
         name: [c.name!],
-        description: c.name, // TODO
         updatable: true,
         insertable: true,
         deletable: true,

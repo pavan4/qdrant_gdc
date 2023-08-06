@@ -11,10 +11,10 @@ import {
 } from "@hasura/dc-api-types";
 import { getCapabilities } from "./handlers/capabilities";
 import { getSchema } from "./handlers/collections";
-// import { executeQuery } from "./handlers/query";
+import { executeQuery } from "./handlers/query";
 // import { executeMutation } from "./handlers/mutation";
 
-const port = Number(process.env.PORT) || 8100;
+const port = Number(process.env.PORT) || 8200;
 const server = Fastify({ logger: { transport: { target: "pino-pretty" } } });
 
 server.register(FastifyCors, {
@@ -50,20 +50,20 @@ server.get<{ Reply: SchemaResponse }>("/schema", async (request, _response) => {
   return schema;
 });
 
-// server.post<{ Body: QueryRequest; Reply: QueryResponse }>(
-//   "/query",
-//   async (request, _response) => {
-//     server.log.info(
-//       { headers: request.headers, query: request.body },
-//       "query.request"
-//     );
+server.post<{ Body: QueryRequest; Reply: QueryResponse }>(
+  "/query",
+  async (request, _response) => {
+    server.log.info(
+      { headers: request.headers, query: request.body },
+      "query.request"
+    );
 
-//     const config = getConfig(request);
-//     const query = request.body;
-//     const response = await executeQuery(query, config);
-//     return response;
-//   }
-// );
+    const config = getConfig(request);
+    const query = request.body;
+    const response = await executeQuery(query, config);
+    return response;
+  }
+);
 
 // server.post<{ Body: MutationRequest; Reply: MutationResponse }>(
 //   "/mutation",
