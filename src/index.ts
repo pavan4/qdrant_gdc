@@ -12,7 +12,7 @@ import {
 import { getCapabilities } from "./handlers/capabilities";
 import { getSchema } from "./handlers/collections";
 import { executeQuery } from "./handlers/query";
-// import { executeMutation } from "./handlers/mutation";
+import { executeMutation } from "./handlers/mutation";
 
 const port = Number(process.env.PORT) || 8200;
 const server = Fastify({ logger: { transport: { target: "pino-pretty" } } });
@@ -65,20 +65,20 @@ server.post<{ Body: QueryRequest; Reply: QueryResponse }>(
   }
 );
 
-// server.post<{ Body: MutationRequest; Reply: MutationResponse }>(
-//   "/mutation",
-//   async (request, _response) => {
-//     server.log.info(
-//       { headers: request.headers, query: request.body },
-//       "mutation.request"
-//     );
+server.post<{ Body: MutationRequest; Reply: MutationResponse }>(
+  "/mutation",
+  async (request, _response) => {
+    server.log.info(
+      { headers: request.headers, query: request.body },
+      "mutation.request"
+    );
 
-//     const config = getConfig(request);
-//     const mutation = request.body;
-//     const response = await executeMutation(mutation, config);
-//     return response;
-//   }
-// );
+    const config = getConfig(request);
+    const mutation = request.body;
+    const response = await executeMutation(mutation, config);
+    return response;
+  }
+);
 
 server.get("/health", async (request, response) => {
   server.log.info(

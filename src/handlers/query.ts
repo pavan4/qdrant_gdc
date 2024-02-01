@@ -63,7 +63,7 @@ async function executeQueryAll(table: string, query: Query, config: Config) {
 
   
 
-async function executeQueryById(
+export async function executeQueryById(
   id: string,
   table: string,
   query: Query,
@@ -107,7 +107,6 @@ async function executeQueryById(
 
 
 function expressionQueryType(query: any){
-  console.log(query);
   switch (query.where.value.value_type) {
     case "uuid":
       return Number(query.where.value.value);
