@@ -2,9 +2,9 @@ FROM node:16-alpine
 
 WORKDIR /app
 COPY package.json .
-COPY package-lock.json .
+# COPY package-lock.json .
 
-RUN npm ci --include=dev
+RUN npm i --include=dev
 
 COPY tsconfig.json .
 COPY nodemon.json .
